@@ -28,9 +28,7 @@ public class Solution1 {
                 int b = nums[start];
                 int c = nums[end];
                 int sum = a + b + c;
-                if (Math.abs(target - sum) < Math.abs(target - tmp)) {
-                    tmp = sum;
-                }
+                tmp=(Math.abs(target - sum) < Math.abs(target - tmp))?tmp=sum:tmp;
                 if (sum > target) {
                     end--;
                 } else if (sum < target) {
