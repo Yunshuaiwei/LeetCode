@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class Main {
     public static void main(String[] args) {
         Solution s = new Solution();
-        int i = s.lengthOfLongestSubstring("aabaab!bb");
+        int i = s.lengthOfLongestSubstring("ahjhkjhj");
         System.out.println(i);
     }
 }
