@@ -3,39 +3,63 @@ package day06;
 /**
  * @Description TODO
  * @Author YunShuaiWei
- * @Date 2020/5/15 19:03
+ * @Date 2020/5/17 16:12
  * @Version
  **/
 public class Solution {
     public static void main(String[] args) {
         Solution s = new Solution();
-        int[] nums = new int[]{1, 1};
-        int i = s.removeDuplicates(nums);
-        System.out.println(i);
+        int[] height = new int[]{4,2,3};
+        int trap = s.trap(height);
+        System.out.println(trap);
     }
 
-    public int removeDuplicates(int[] nums) {
-        if (nums == null || nums.length == 0) {
+    public int trap(int[] height) {
+        if (height==null||height.length<=2){
             return 0;
         }
-        int index = 1;
-        //记录0号下标元素
-        int num = nums[0];
-        //从1号下标开始遍历
-        for (int i = 1; i < nums.length; i++) {
-            //循环查找不等于num的元素
-            while (nums[i] == num) {
-                i++;
-                //整个数组遍历结束，直接返回
-                if (i == nums.length) {
-                    return index;
+        if (height.length==3){
+            int min = Math.min(height[0], height[2]);
+            return Math.max(min - height[1], 0);
+        }
+        int result = 0;
+        int next = 0;
+        int i = 0;
+        while (height[i] == 0) {
+            i++;
+            if (i==height.length){
+                return result;
+            }
+        }
+        while (i < height.length - 1) {
+            next = i + 1;
+            if (height[i] <= height[next]) {
+                while (height[i] <= height[next]) {
+                    next++;
+                    i++;
+                    if (next == height.length) {
+                        break;
+                    }
+                }
+            } else {
+                while (height[i] > height[next]) {
+                    next++;
+                    if (next == height.length) {
+                        i = i + 1;
+                        break;
+                    }
+                }
+                if (next != height.length) {
+                    int min = Math.min(height[i], height[next]);
+                    int tmp = min * (Math.abs(i - next) - 1);
+                    for (int j = i + 1; j < next; j++) {
+                        tmp -= height[j];
+                    }
+                    result += tmp;
+                    i = next;
                 }
             }
-            //将找到的不等于num的元素覆盖掉index处的元素
-            nums[index++] = nums[i];
-            //改变num的值，开始下一轮循环
-            num = nums[i];
         }
-        return index;
+        return result;
     }
 }
