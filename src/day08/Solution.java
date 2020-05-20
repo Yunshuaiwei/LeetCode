@@ -1,9 +1,11 @@
 package day08;
 
+import java.util.HashSet;
+
 /**
  * @Description TODO
  * @Author YunShuaiWei
- * @Date 2020/5/19 15:24
+ * @Date 2020/5/20 14:25
  * @Version
  **/
 public class Solution {
@@ -11,38 +13,34 @@ public class Solution {
 
     }
 
-    public boolean hasCycle(ListNode head) {
-        if (head == null) {
+    public boolean isHappy(int n) {
+        if (n == 0) {
             return false;
         }
-        ListNode slow = head;
-        ListNode fast = head;
-        while (slow != null) {
-            fast = fast.next;
-            if (fast == null) {
-                return false;
-            } else {
-                fast = fast.next;
+        if (n == 1) {
+            return true;
+        }
+        String s = "" + n;
+        int num = 0;
+        HashSet<Integer> set = new HashSet<>();
+        while (true) {
+            for (int i = 0; i < s.length(); i++) {
+                int a = s.charAt(i) - 48;
+                num += (int) Math.pow(a, 2);
             }
-            if (fast == null) {
-                return false;
-            }
-            if (fast == slow) {
+            if (num == 1) {
                 return true;
             }
-            slow = slow.next;
+            if (num == 0) {
+                return false;
+            }
+            if (set.contains(num)) {
+                return false;
+            } else {
+                set.add(num);
+            }
+            s = "" + num;
+            num = 0;
         }
-        return false;
     }
 }
-
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}
-
