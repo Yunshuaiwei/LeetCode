@@ -1,52 +1,47 @@
 package day10;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @Description TODO
  * @Author YunShuaiWei
- * @Date 2020/5/23 13:58
+ * @Date 2020/5/23 17:19
  * @Version
  **/
 public class Solution {
     public static void main(String[] args) {
-
+        int[] arr = new int[]{3, 2, 1, 2, 1, 7};
+        Solution s = new Solution();
+        int i = s.minIncrementForUnique(arr);
+        System.out.println(i);
     }
 
-    public void setZeroes(int[][] matrix) {
-        if (matrix == null) {
-            return;
+    public int minIncrementForUnique(int[] A) {
+        if (A == null || A.length == 1 || A.length == 0) {
+            return 0;
         }
-        boolean flag = true;
-        //保存值为0的行号
-        ArrayList<Integer> row = new ArrayList<>();
-        //保存值为0的列号
-        ArrayList<Integer> col = new ArrayList<>();
-        //循环遍历二维数组，若某个值为0，则将行列好分别保存到对用的ArrayList中
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == 0) {
-                    flag = false;
-                    row.add(i);
-                    col.add(j);
-                }
+        int num = 0;
+        //对数组进行排序
+        Arrays.sort(A);
+        //用k记录当前序列的最大值
+        int k = A[0];
+        for (int i = 1; i < A.length; i++) {
+            //当前值和最大值相等
+            if (A[i] == k) {
+                //最大值+1
+                k++;
+                //move次数+1
+                num++;
+            } else if (A[i] < k) {//当前值比最大值小
+                //需要move最大值和当前值差值再+1次
+                num += (k - A[i] + 1);
+                //最大值+1
+                k++;
+            } else {
+                //改变最大值为A[i]
+                k = A[i];
             }
         }
-        //若flag为true则说明二维数组中没有0，则直接返回
-        if (flag) {
-            return;
-        }
-        //将所对应行的值改为0
-        for (Integer i : row) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                matrix[i][j] = 0;
-            }
-        }
-        //将所对应列的值改为0
-        for (Integer i : col) {
-            for (int j = 0; j < matrix.length; j++) {
-                matrix[j][i] = 0;
-            }
-        }
+        return num;
     }
 }
