@@ -20,18 +20,23 @@ public class Solution1 {
         if (s == null) {
             return 0;
         }
+
         ArrayList<Integer> list = new ArrayList<>();
         Stack<Character> stack = new Stack<>();
+        Stack<Character> numStack = new Stack<>();
         String tmp = "";
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
+            //排除空格的情况
             if (c == ' ') {
                 continue;
             }
+            //左括号则直接入栈
             if (c == '(') {
                 stack.push(c);
             } else {
                 if (c > 47 && c < 58) {
+                    //多位数
                     tmp += c;
                 } else {
                     if (!tmp.equals("")) {
@@ -41,18 +46,37 @@ public class Solution1 {
                     }
                     if (c != ')') {
                         stack.push(c);
-                    } else {
+                    } else {//匹配到右括号
+                        while (stack.peek() != '(') {//将stack中的元素放入numStack，即倒序字符串
+                            int a = list.remove(list.size() - 1);
+                            numStack.push((char) a);
+                            numStack.push(stack.pop());
+                        }
                         int a = list.remove(list.size() - 1);
-                        while (stack.peek() != '(') {
-                            Character pop = stack.pop();
+                        numStack.push((char) a);
+                        int num = 0;
+                        //计算numStack中表达式的结果
+                        while (!numStack.isEmpty()) {
+                            Character pop = numStack.pop();
+                            if (pop != '+' && pop != '-') {
+                                num = pop;
+                                continue;
+                            }
                             if (pop == '+') {
-                                a = (list.remove(list.size() - 1) + a);
+                                num += numStack.pop();
                             } else {
-                                a = (list.remove(list.size() - 1) - a);
+                                num -= numStack.pop();
                             }
                         }
                         stack.pop();
-                        list.add(a);
+                        //将结果入栈
+                        if (num < 0) {
+                            stack.pop();
+                            stack.push('+');
+                            list.add(-num);
+                        } else {
+                            list.add(num);
+                        }
                     }
                 }
             }
@@ -60,6 +84,7 @@ public class Solution1 {
         if (!tmp.equals("")) {
             list.add(Integer.parseInt(tmp));
         }
+        //表达式没有括号，则计算栈中表达式的值
         if (!stack.isEmpty()) {
             while (!stack.isEmpty()) {
                 int a = list.remove(list.size() - 1);
