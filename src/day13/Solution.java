@@ -82,10 +82,11 @@ public class Solution {
     }
 
     public int[][] merge(int[][] intervals) {
-        if (intervals == null) {
-            return null;
+        if (intervals.length < 2) {
+            return intervals;
         }
-        int[] tmp = null;
+        //        Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+        int[] tmp;
         boolean flag = false;
         for (int i = 1; i < intervals.length; i++) {
             for (int j = 0; j < intervals.length - i; j++) {
@@ -105,10 +106,10 @@ public class Solution {
         ArrayList<int[]> result = new ArrayList<>();
         result.add(intervals[0]);
         for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0]>=result.get(result.size()-1)[1]){
-                result.get(result.size()-1)[1]=
-                        Math.max(intervals[i][1],result.get(result.size()-1)[1]);
-            }else{
+            if (intervals[i][0] <= result.get(result.size() - 1)[1]) {
+                result.get(result.size() - 1)[1] =
+                        Math.max(intervals[i][1], result.get(result.size() - 1)[1]);
+            } else {
                 result.add(intervals[i]);
             }
         }
