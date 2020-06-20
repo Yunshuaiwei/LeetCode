@@ -1,56 +1,81 @@
 package day13;
 
-import java.util.Stack;
+import java.util.Arrays;
 
 /**
  * @Description TODO
  * @Author YunShuaiWei
- * @Date 2020/6/19 14:49
+ * @Date 2020/6/20 15:07
  * @Version
  **/
 public class Solution {
     public static void main(String[] args) {
+        int[][] arr = {
+                {1, 3},
+                {2, 6},
+                {15, 18},
+                {8, 10}
+        };
         Solution s = new Solution();
-        String s1 = s.removeDuplicateLetters("bbcaac");
-        System.out.println(s1);
+        int[][] merge = s.merge(arr);
+        for (int[] ints : merge) {
+            System.out.println(Arrays.toString(ints));
+        }
     }
 
-    public String removeDuplicateLetters(String s) {
-        if (s == null) {//当字符串为空时，直接返回
+    public int[][] merge(int[][] intervals) {
+        if (intervals == null) {
             return null;
         }
-        Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            //当栈中存在该元素时，则跳出本次循环
-            if (stack.contains(c)) {
-                continue;
-            }
-            if (!stack.isEmpty()) {
-                //循环判断，当栈顶元素在字符串索引i之后的位置也存在时，则可以将该栈顶元素出栈
-                while (!stack.isEmpty() && stack.peek() > c) {
-                    boolean flag = false;
-                    for (int j = i + 1; j < s.length(); j++) {
-                        if (s.charAt(j) == stack.peek()) {
-                            //当字符串索引i之后存在该栈顶元素时，则该栈顶元素出栈
-                            //将标志位改为true
-                            flag = true;
-                            stack.pop();
-                            break;
-                        }
-                    }
-                    //当标志位为false时，即字符串索引i之后不存在栈顶元素，则退出本次循环
-                    if (!flag) {
-                        break;
-                    }
+        int[] tmp = null;
+        boolean flag = false;
+        //使用冒泡排序，根据二维数组中每个元素索引为0的元素进行排序(由小到大)
+        for (int i = 1; i < intervals.length; i++) {
+            for (int j = 0; j < intervals.length - i; j++) {
+                if (intervals[j][0] > intervals[j + 1][0]) {
+                    flag = true;
+                    tmp = intervals[j];
+                    intervals[j] = intervals[j + 1];
+                    intervals[j + 1] = tmp;
                 }
             }
-            //将该元素入栈
-            stack.push(c);
+            if (flag) {
+                flag = false;
+            } else {
+                break;
+            }
         }
-        String result = "";
-        for (int i = 0; i < stack.size(); i++) {
-            result += stack.get(i);
+        //用该数组标记，被合并过的数组
+        boolean[] label = new boolean[intervals.length];
+        for (int i = 0; i < intervals.length; i++) {
+            for (int j = i + 1; j < intervals.length; j++) {
+                if (label[j]) {
+                    continue;
+                }
+                //当intervals[i][1] >= intervals[j][0]说明，这两个以为数组有交集
+                if (intervals[i][1] >= intervals[j][0]) {
+                    intervals[i][1] = Math.max(intervals[i][1], intervals[j][1]);
+                    label[j] = true;
+                } else {
+                    break;
+                }
+            }
+        }
+        int num = 0;
+        //统计被合并后二维数组中还有多少元素
+        for (int i = 0; i < label.length; i++) {
+            if (!label[i]) {
+                num++;
+            }
+        }
+        int[][] result = new int[num][2];
+        int index = 0;
+        //将合并后的数组搬移到结果集中
+        for (int i = 0; i < label.length; i++) {
+            if (!label[i]) {
+                result[index] = intervals[i];
+                index++;
+            }
         }
         return result;
     }
