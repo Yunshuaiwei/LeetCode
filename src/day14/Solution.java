@@ -3,48 +3,46 @@ package day14;
 /**
  * @Description TODO
  * @Author YunShuaiWei
- * @Date 2020/6/21 16:33
+ * @Date 2020/6/22 15:05
  * @Version
  **/
 public class Solution {
     public static void main(String[] args) {
         Solution s = new Solution();
-        String s1 = s.convert("ABC", 4);
-        System.out.println("ABC".equals(s1));
+        String[] strs = new String[]{"", ""};
+        String res = s.longestCommonPrefix(strs);
+        System.out.println(res);
     }
 
-    public String convert(String s, int numRows) {
-        if (s == null || numRows < 2 || s.length() < 3) {
-            return s;
+    public String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) {
+            return "";
         }
-        String[] arr = new String[numRows];
-        int index = 0;
-        //用于记录字符串s的索引
-        int sIndex = 0;
-        while (true) {
-            for (int i = index; i < numRows && sIndex < s.length(); i++) {
-                arr[i] += s.charAt(sIndex++);
-                index++;
-            }
-            if (sIndex >= s.length()) {
-                break;
-            }
-            index--;
-            for (int i = index - 1; i > 0 && sIndex < s.length(); i--) {
-                arr[i] += s.charAt(sIndex++);
-                index--;
-            }
-            index--;
-            if (sIndex >= s.length()) {
-                break;
-            }
+        if (strs.length == 1) {
+            return strs[0];
         }
-        String result = "";
-        for (int i = 0; i < numRows; i++) {
-            if (arr[i] != null) {
-                //截取字符串，去掉前面索引0-4：null
-                result += arr[i].substring(4, arr[i].length());
+        String result = strs[0];
+        //左指针永远指向0
+        int l = 0;
+        for (int i = 1; i < strs.length; i++) {
+            String str = strs[i];
+            //右指针用于记录最长匹配到的字符个数
+            int r = 0;
+            //排除取到的为空字符的情况，建议不要放在while循环中，这样会影响效率
+            if (result.length() != 0 && str.length() != 0) {
+                while (result.charAt(r) == str.charAt(r)) {
+                    r++;
+                    if (r == result.length() || r == str.length()) {
+                        break;
+                    }
+                }
             }
+            //当r为0说明没有匹配到字符，则可以直接返回
+            if (r == 0) {
+                return "";
+            }
+            //每次截取所匹配到的字符
+            result = result.substring(l, r);
         }
         return result;
     }
