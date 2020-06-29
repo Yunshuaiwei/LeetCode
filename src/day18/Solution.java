@@ -1,59 +1,72 @@
 package day18;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 /**
  * @Description TODO
  * @Author YunShuaiWei
- * @Date 2020/6/28 16:04
+ * @Date 2020/6/29 14:43
  * @Version
  **/
 public class Solution {
-    public static void main(String[] args) {
-        Solution s = new Solution();
-        int i = s.addDigits(38);
-        System.out.println(i);
-    }
+
+    private List<Integer> list = new ArrayList<Integer>();
 
     /**
      * 递归实现
      *
-     * @return int
-     * @Param [num]
+     * @return java.util.List<java.lang.Integer>
+     * @Param [root]
      **/
-    public int addDigits(int num) {
-        //小于10则直接返回
-        if (num < 10) {
-            return num;
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null) {
+            return list;
         }
-        int n = 0;
-        while (num != 0) {
-            //每次从个位取数字
-            n += num % 10;
-            //去掉一位数
-            num = num / 10;
+        //当左子树不为空则向左递归
+        if (root.left != null) {
+            inorderTraversal(root.left);
         }
-        //递归求下一个数
-        return addDigits(n);
+        //当前节点值加入list中
+        list.add(root.val);
+        //当由子树不为空则向右递归
+        if (root.right != null) {
+            inorderTraversal(root.right);
+        }
+        return list;
     }
 
     /**
      * 循环实现
      *
-     * @return int
-     * @Param [num]
+     * @return java.util.List<java.lang.Integer>
+     * @Param [root]
      **/
-    public int addDigits2(int num) {
-        while (true) {
-            int n = 0;
-            while (num != 0) {
-                //每次从个位取数字
-                n += num % 10;
-                //去掉一位数
-                num = num / 10;
+    public List<Integer> inorderTraversal1(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        while (cur != null || !stack.isEmpty()) {
+            //当前节点不为空时则入栈，并且向左循环
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
             }
-            num = n;
-            if (num < 10) {
-                return num;
-            }
+            cur = stack.pop();
+            list.add(cur.val);
+            cur = cur.right;
         }
+        return list;
+    }
+}
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(int x) {
+        val = x;
     }
 }
