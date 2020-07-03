@@ -1,5 +1,6 @@
 package day20;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -58,6 +59,41 @@ public class Solution {
         }
         return list;
     }
+
+    public List<Integer> preorderTraversal2(TreeNode root) {
+        if(root==null){
+            return arr;
+        }
+        arr.add(root.val);
+        if (root.left!=null){
+            preorderTraversal2(root.left);
+        }
+        if (root.right!=null){
+            preorderTraversal2(root.right);
+        }
+        return arr;
+    }
+
+    public List<Integer> preorderTraversal3(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        if (root==null){
+            return list;
+        }
+        stack.push(root);
+        while (!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            list.add(node.val);
+            if (node.right!=null){
+                stack.push(node.right);
+            }
+            if (node.left!=null){
+                stack.push(node.left);
+            }
+        }
+        return list;
+    }
+
 }
 
 class TreeNode {
