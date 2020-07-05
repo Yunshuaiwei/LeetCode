@@ -1,47 +1,71 @@
 package day23;
 
-import java.util.*;
-
 /**
  * @Description: TODO
  * @Author YunShuaiWei
- * @Date 2020/7/5 19:10
+ * @Date 2020/7/5 19:43
  * @Version
  **/
 public class Solution {
-    public static void main(String[] args) {
-        int[] nums = new int[]{1};
-        Solution s = new Solution();
-        int[] ints = s.topKFrequent(nums, 1);
-        System.out.println(Arrays.toString(ints));
-    }
 
-    public int[] topKFrequent(int[] nums, int k) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        //将数组中的元素加入哈希表中，键为nums中的元素，值为该元素出现的次数
-        for (int num : nums) {
-            if (map.containsKey(num)) {
-                Integer val = map.get(num) + 1;
-                map.put(num, val);
+    private ListNode res = null;
+    private ListNode cur = res;
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        //利用两个临时变量node1和node2来遍历链表
+        ListNode node1 = l1;
+        ListNode node2 = l2;
+        while (node1 != null && node2 != null) {
+            //l1中val<l2中的val
+            if (node1.val < node2.val) {
+                //创建新的节点，并链接到res的next域
+                if (res == null) {
+                    res = new ListNode(node1.val);
+                    cur = res;
+                } else {
+                    cur.next = new ListNode(node1.val);
+                    cur = cur.next;
+                }
+                node1 = node1.next;
             } else {
-                map.put(num, 1);
+                if (res == null) {
+                    res = new ListNode(node2.val);
+                    cur = res;
+                } else {
+                    cur.next = new ListNode(node2.val);
+                    cur = cur.next;
+                }
+                node2 = node2.next;
             }
         }
-        //将HashMap添加到堆中，按从大到小的顺序添加
-        PriorityQueue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>(new Comparator<Map.Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
-        //将HashMap加入到优先级队列中
-        queue.addAll(map.entrySet());
-        ArrayList<Integer> list = new ArrayList<>();
-        int[] res = new int[k];
-        //取前k个高频元素，并加入到数组中
-        for (int i = 0; i < res.length; i++) {
-            res[i] = Objects.requireNonNull(queue.poll()).getKey();
+        if (node1 == null) {
+            cur.next = node2;
+        } else {
+            cur.next = node1;
         }
         return res;
+    }
+}
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+        this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
     }
 }
