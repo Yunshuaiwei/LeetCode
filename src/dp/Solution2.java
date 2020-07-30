@@ -8,7 +8,7 @@ import java.util.Arrays;
  * @Date 2020/7/30 14:29
  * @Version
  **/
-public class Solution {
+public class Solution2 {
     public static void main(String[] args) {
 //        int[] arr = new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4};
 //        Solution s = new Solution();
@@ -17,7 +17,7 @@ public class Solution {
 
         int[] wt = new int[]{2, 1, 3};
         int[] val = new int[]{4, 2, 3};
-        Solution s = new Solution();
+        Solution2 s = new Solution2();
         int i = s.knapsack(4, 3, wt, val);
         System.out.println(i);
     }
