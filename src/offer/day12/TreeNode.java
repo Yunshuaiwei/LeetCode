@@ -6,7 +6,7 @@ package offer.day12;
  * @Date 2020/8/3 16:06
  * @Version
  **/
-public class Solution {
+class Solution {
     /**
      * @return boolean
      * @Param
@@ -35,6 +35,7 @@ public class Solution {
         }
         return recur(A.left, B.left) && recur(A.right, B.right);
     }
+
     /**
      * @return offer.day12.TreeNode
      * @Param
@@ -42,10 +43,10 @@ public class Solution {
      * @Description: 返回树的镜像
      **/
     public TreeNode mirrorTree(TreeNode root) {
-        if (root!=null){
-            TreeNode tmp=root.left;
-            root.left=root.right;
-            root.right= tmp;
+        if (root != null) {
+            TreeNode tmp = root.left;
+            root.left = root.right;
+            root.right = tmp;
             mirrorTree(root.left);
             mirrorTree(root.right);
         }
@@ -53,7 +54,7 @@ public class Solution {
     }
 }
 
-class TreeNode {
+public class TreeNode {
     int val;
     TreeNode left;
     TreeNode right;
@@ -62,3 +63,4 @@ class TreeNode {
         val = x;
     }
 }
+
