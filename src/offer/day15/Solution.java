@@ -52,7 +52,7 @@ public class Solution {
      * @Date 17:30 2020/8/5
      * @Description: 从上到下按层打印二叉树
      **/
-    public List<List<Integer>> levelOrder(TreeNode root) {
+    public List<List<Integer>> levelOrder2(TreeNode root) {
         List<List<Integer>> res = new LinkedList<>();
         if (root == null) {
             return res;
@@ -70,6 +70,38 @@ public class Solution {
                 }
                 if (node.right != null) {
                     queue.add(node.right);
+                }
+                size--;
+            }
+            res.add(list);
+        }
+        return res;
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new LinkedList<>();
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            LinkedList<Integer> list = new LinkedList<>();
+            int size = queue.size();
+            while (size > 0) {
+                TreeNode poll = queue.poll();
+                //偶数层
+                if (res.size() % 2 == 0) {
+                    list.addLast(poll.val);
+                    //奇数层
+                } else {
+                    list.addFirst(poll.val);
+                }
+                if (poll.left != null) {
+                    queue.add(poll.left);
+                }
+                if (poll.right != null) {
+                    queue.add(poll.right);
                 }
                 size--;
             }
