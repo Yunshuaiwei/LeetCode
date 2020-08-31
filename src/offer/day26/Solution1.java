@@ -58,6 +58,4 @@ public class Solution1 {
         }
         return res.toArray(new int[res.size()][]);
     }
-
-
 }
